@@ -1,0 +1,10 @@
+extends layout.pug
+
+block content
+  form(action="/add-post" method="POST")
+    input(type="text" name="title")
+    br
+    br
+    textarea(name="content" placeholder="输入内容")
+    br
+    button 提交

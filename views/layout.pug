@@ -1,0 +1,29 @@
+doctype html
+html
+  head
+    title Simple BBS
+    link(rel="stylesheet", href="/static/css/common.css")
+    script(src="/static/js/jquery-3.3.1.js")
+    script(src="/static/js/axios-0.18.0.js")
+  body
+    div
+      a(href='/') 首页
+      | 
+      if (user)
+        span 欢迎 
+          a(href="/user/" + user.id) #{user.name}
+        | 
+        a(href='/add-post') 发帖
+        | 
+        a(href='/logout') 登出
+      else
+        a(href='/login') 登录
+        | 
+        a(href='/register') 注册
+
+    block content
+      
+    footer 
+      p Copyright 
+        span &copy; 2018 zyycode
+      block logic

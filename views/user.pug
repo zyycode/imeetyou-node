@@ -1,0 +1,22 @@
+extends layout.pug
+
+block content
+  if user
+    h4=user.name 
+    p 他发过的帖子
+    ul
+      each post in userPosts
+        li
+          a(href="/post/" + post.id)=post.content
+          a(href="/del-post/" + post.id) 删除
+    p 他的评论
+    ul
+      each coment in userComents
+        li
+          h3
+            span=coment.postTitle
+            a(href="/del-coment/" + coment.id) 删除
+          p=coment.content 
+          p 评论时间 #{new Date(coment.timetamp).toLocaleString()}
+  else
+    p 用户不存在

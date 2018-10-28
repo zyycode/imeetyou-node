@@ -1,0 +1,46 @@
+extends layout.pug
+
+block content
+  div
+    h2=post.title
+    div=post.content
+    h5
+      span=new Date(post.timetamp).toLocaleString()
+      br
+      span 发帖人 
+      a(href="/user/" + post.userId)=post.name
+
+  ul.coments
+    each c in coments
+      li
+        span=new Date(c.timetamp).toLocaleString()
+        br
+        a(href="/user/" + c.userId)=c.name
+        p=c.content
+  form(action="/add-coment" method="post")
+    input(hidden=true name="postid" value=post.id)
+    textarea(placeholder="请输入您的内容" name="content")
+    br
+    button 提交评论
+
+block  logic
+  script.
+    $(() => {
+      $('form').on('submit', async e => {
+        e.preventDefault()
+        let postid = $('input[name="postid"]').val()
+        let content = $('textarea[name="content"]').val()
+        let res = (await axios.post('/add-coment', {
+          postid,
+          content
+        })).data
+        
+        $('ul.coments').append(`
+          <li>
+            <span>${new Date(res.timetamp).toLocaleString()}</span><br>
+            <a href="/user/${res.userId}">${res.name}</a>
+            <p>${content}</p>
+          </li>
+        `)
+      })
+    })

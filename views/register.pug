@@ -1,0 +1,7 @@
+extends layout.pug
+
+block content
+  form(action="/register" method="POST")
+    input(type="text" name="username")
+    input(type="password" name="password")
+    button 注册

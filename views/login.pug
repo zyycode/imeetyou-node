@@ -1,0 +1,33 @@
+extends layout.pug
+
+block content
+  form(action="/login" method="POST")
+    | 用户名
+    input(type="text" name="username")
+    br
+    | 密码
+    input(type="password", name="password")
+    br
+    | 验证码
+    input(type="text", name="captcha")
+    img(src="/captcha")
+    br
+    button 登录
+
+block logic
+  script.
+    $(() => {
+      $('form').on('submit', async (e) => {
+        e.preventDefault()
+        try {
+          let req = await axios.post('/login', {
+            username: $("input[name='username']").val(),
+            password: $("input[name='password']").val(),
+            captcha: $("input[name='captcha']").val()
+          })
+          location.href = '/'
+        } catch(e) {
+          alert('用户名密码或验证码错误！')
+        }
+      })
+    })
