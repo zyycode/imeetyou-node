@@ -1,5 +1,4 @@
 ![](/imeetyou-logo.png)
-![](https://badgen.net/github/license/micromatch/micromatch)
 
 ## 说明
 > 如果你对本项目有兴趣，欢迎 start ，谢谢 😄
@@ -19,7 +18,7 @@ vue + vue-router + express + sqlite + bootstrap + axios + es6
 - [x] 数据库数据操作  
 
 ## 项目运行
-因为本项目是前后端分离的，所以需要将后端项目一起下载到本地使用
+因为本项目是前后端分离的，所以需要将前端项目一起下载到本地使用
 
 ```
 git clone https://github.com/zyycode/imeetyou-node.git
@@ -30,4 +29,4 @@ node app.js // 推荐使用 nodemon
 
 
 ## license
-MIT
+![](https://badgen.net/github/license/micromatch/micromatch)

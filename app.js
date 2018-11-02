@@ -5,6 +5,7 @@ const multer = require('multer')
 const path = require('path')
 const sqlite = require('sqlite')
 const svgCaptcha = require('svg-captcha')
+const ejs = require('ejs')
 
 const app = express()
 const port = 3000
@@ -15,6 +16,11 @@ const dbPromise = sqlite.open(path.join(__dirname, './bbs.db'), { Promise })
 app.locals.pretty = true
 
 app.use('/static', express.static('./static'))
+app.use(express.static('./dist'))
+
+
+app.engine('html', ejs.__express)
+app.set('view engine', 'html')
 
 app.use((req, res, next) => {
   console.log(req.method, req.url)
@@ -37,13 +43,13 @@ app.use(function sessionMiddleware(req, res, next) {
 // 判断用户是否登录
 app.use(async (req, res, next) => {
   req.user = await db.get('SELECT * FROM users WHERE id=?', req.signedCookies.userid)
+  console.log(req.user)
   next()
 })
 
 // 首页
 app.get('/', async (req, res, next) => {
-  let posts = await db.all('SELECT * FROM posts')
-  res.render('index.pug', { posts, user: req.user })
+  res.render('index.html')
 })
 
 app.get('/api/posts', async (req, res, next) => {
@@ -102,7 +108,7 @@ app.route('/register')
 // 登录
 app.route('/login')
   .get((req, res) => {
-    res.render('login.pug')
+    // res.render('login.pug')
   })
   .post(async (req, res) => {
     if (req.body.captcha != sessions[req.cookies.sessionId].captcha) {
@@ -135,13 +141,6 @@ app.get('/captcha', (req, res, next) => {
   }
   res.type('svg')
   res.send(captcha.data)
-  // res.end(`
-  // <svg width="100" height="50" version="1.1" xmlns="http://www.w3.org/2000/svg">
-  //   <text x="0" y="20">${
-  //     captcha
-  //   }</text>
-  // </svg>
-  // `)
 })
 
 // 登出(清除cookie)
@@ -150,10 +149,12 @@ app.get('/logout', (req, res, next) => {
   res.redirect('/')
 })
 
-// 用户
+// 前后端分离，不使用pug模板来渲染前端页面
+/*
+//用户
 app.get('/user/:userid', async (req, res, next) => {
   let userid = req.params.userid
-  // let user = await db.get('SELECT * FROM users WHERE id=?', userid)
+  let user = await db.get('SELECT * FROM users WHERE id=?', userid)
   if (req.user) {
     let userPosts = await db.all('SELECT * FROM posts WHERE userId=?', userid)
     let userComents = await db.all('SELECT coments.*, title AS postTitle FROM coments JOIN posts ON coments.postId=posts.id WHERE coments.userId=?', userid)
@@ -163,7 +164,7 @@ app.get('/user/:userid', async (req, res, next) => {
   }
 })
 
-// 帖子详情
+//帖子详情
 app.get('/post/:postid', async (req, res, next) => {
   let postid = req.params.postid
   let post = await db.get('SELECT posts.*, name FROM posts JOIN users ON posts.userId=users.id WHERE posts.id=?', postid)
@@ -174,6 +175,7 @@ app.get('/post/:postid', async (req, res, next) => {
     res.status(404).render('post-not-found.pug')
   }
 })
+*/
 
 // 添加评论(通过cookie判断用户id)
 app.post('/add-coment', async (req, res, next) => {
@@ -192,7 +194,7 @@ app.post('/add-coment', async (req, res, next) => {
 // 发帖
 app.route('/add-post')
   .get((req, res) => {
-    res.render('add-post.pug')
+    // res.render('add-post.pug')
   })
   .post(async (req, res, next) => {
     if (req.signedCookies.userid) {

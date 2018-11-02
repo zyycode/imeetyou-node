@@ -2,6 +2,7 @@
 node_modules
 bbs
 sqlite3.exe
+dist
 
 # local env files
 .env.local
