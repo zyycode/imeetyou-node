@@ -23,7 +23,7 @@
 - [x] 数据库数据操作  
 
 ## 在线预览
-**地址:** [http://bbs.zyycoder.com](http://bbs.zyycoder.com)
+**地址:** [https://bbs.zyycoder.com](https://bbs.zyycoder.com)
 
 ----
 ![](/code.png)
